@@ -4,12 +4,19 @@ env:
 dotenv: [".env"]
 tasks:
   migrate-install: go install -tags "postgres,mysql,sqlite" github.com/golang-migrate/migrate/v4/cmd/migrate@latest
- 
+
   up: docker compose  up -d
   down: docker compose down
 
-  run: "wgo -file=.go -file=.yaml -file=.templ -xfile=_templ.go templ generate :: go run ./cmd/web"
- 
+  run-web:
+    cmds:
+      - "wgo -file=.go -file=.yaml -file=.templ -xfile=_templ.go templ generate :: go run ./cmd/web"
+  run-assemble:
+    cmds:
+      - "wgo -file=.go -file=.yaml -file=.templ -xfile=_templ.go templ generate :: go run ./cmd/pizza_assemble"
+
+  run-all-in-parallel: task -p  run-web run-assemble
+
   kafdrop: google-chrome  http://localhost:9000
 
   migrate-new:
