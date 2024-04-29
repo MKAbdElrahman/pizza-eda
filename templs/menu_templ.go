@@ -52,7 +52,7 @@ func menuView(menu models.PizzaMenu) templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"max-w-lg mx-auto p-6 bg-yellow-50 rounded-lg shadow-lg\"><h2 class=\"text-3xl font-bold mb-6 text-red-700\">🍕 Customize Your Pizza 🍕</h2><form action=\"/pizza/order\" class=\"grid grid-cols-2 gap-4\" method=\"POST\"><div><label for=\"sauce\" class=\"block text-lg font-semibold text-red-700\">Sauce:</label><div class=\"mt-1 flex flex-wrap gap-4\"><!-- Added flex and flex-wrap for alignment and wrapping --><!-- Loop through sauce options -->")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"max-w-lg mx-auto p-6 bg-yellow-50 rounded-lg shadow-lg\"><h2 class=\"text-3xl font-bold mb-6 text-red-700\">🍕 Customize Your Pizza 🍕</h2><form action=\"/order\" class=\"grid grid-cols-2 gap-4\" method=\"POST\"><div><label for=\"sauce\" class=\"block text-lg font-semibold text-red-700\">Sauce:</label><div class=\"mt-1 flex flex-wrap gap-4\"><!-- Added flex and flex-wrap for alignment and wrapping --><!-- Loop through sauce options -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

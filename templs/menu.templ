@@ -12,7 +12,7 @@ templ MenuView(r *http.Request, m models.PizzaMenu) {
 templ menuView(menu models.PizzaMenu) {
 	<div class="max-w-lg mx-auto p-6 bg-yellow-50 rounded-lg shadow-lg">
 		<h2 class="text-3xl font-bold mb-6 text-red-700">🍕 Customize Your Pizza 🍕</h2>
-		<form action="/pizza/order" class="grid grid-cols-2 gap-4" method="POST">
+		<form action="/order" class="grid grid-cols-2 gap-4" method="POST">
 			<div>
 				<label for="sauce" class="block text-lg font-semibold text-red-700">Sauce:</label>
 				<div class="mt-1 flex flex-wrap gap-4">

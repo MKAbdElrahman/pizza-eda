@@ -65,7 +65,7 @@ func main() {
 	// static files
 	fileServer := http.FileServer(http.Dir("./static_assets/"))
 	mux.Handle("GET /static/", http.StripPrefix("/static", fileServer))
-	userService := services.NewUserService(userStore)
+	userService := services.NewUserService(userStore, orderStore)
 	userHandler := handlers.NewUserHandler(userService, orderStore, publisher, sessionManager, logger, errorHandler)
 
 	mux.Handle("GET /{$}", dynamic.ThenFunc(handlers.HandleViewHome))
@@ -78,7 +78,10 @@ func main() {
 	mux.Handle("GET /user/signup", dynamic.ThenFunc(userHandler.HandleGetUserSignupForm))
 	mux.Handle("POST /user/signup", dynamic.ThenFunc(userHandler.HandlePostedSignup))
 
-	mux.Handle("POST /pizza/order", protected.ThenFunc(userHandler.HandleOrderPizza))
+	mux.Handle("POST /order", protected.ThenFunc(userHandler.HandleCreateOrder))
+
+	mux.Handle("GET /user/{userID}/orders", protected.ThenFunc(userHandler.HandleGetUserOrders))
+	mux.Handle("GET /user/{userID}/orders/{orderID}", protected.ThenFunc(userHandler.HandleGetUserOrder))
 
 	mux.Handle("/user/logout", protected.ThenFunc(userHandler.HandlePostedLogout))
 

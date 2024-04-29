@@ -11,14 +11,22 @@ type UserStore interface {
 	Insert(params models.UserSignupParams) error
 	GetUserByEmail(email string) (*models.User, error)
 }
-type userService struct {
-	userStore UserStore
+
+type OrderStore interface {
+	GetOrders(userID int) ([]models.PizzaOrder, error)
+	GetOrderByID(userID int, orderID string) (*models.PizzaOrder, error)
 }
 
-func NewUserService(userStore UserStore) *userService {
+type userService struct {
+	userStore  UserStore
+	orderStore OrderStore
+}
+
+func NewUserService(userStore UserStore, orderStore OrderStore) *userService {
 
 	return &userService{
-		userStore: userStore,
+		userStore:  userStore,
+		orderStore: orderStore,
 	}
 }
 
@@ -49,4 +57,12 @@ func (m *userService) Authenticate(p models.UserLoginParams) (int, error) {
 
 func (m *userService) Exists(id int) (bool, error) {
 	return false, nil
+}
+
+func (m *userService) GetOrders(userID int) ([]models.PizzaOrder, error) {
+	return m.orderStore.GetOrders(userID)
+}
+
+func (m *userService) GetOrderByID(userID int, orderID string) (*models.PizzaOrder, error) {
+	return m.orderStore.GetOrderByID(userID, orderID)
 }

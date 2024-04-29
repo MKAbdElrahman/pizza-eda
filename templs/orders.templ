@@ -1,0 +1,54 @@
+package templs 
+
+import "pizza/models"
+import "net/http"
+import "pizza/handlers/middleware"
+import "fmt"
+
+templ OrdersView(r *http.Request, m []models.PizzaOrder) {
+	@layout(r, "Orders", ordersView(r, m))
+}
+
+templ ordersView(r *http.Request, orders []models.PizzaOrder) {
+	<div class="w-full max-w-screen-lg mx-auto">
+		<!-- Centering the table -->
+		<div class="flex justify-between items-center mb-4">
+			<span class="inline-block bg-green-500 text-white px-4 py-2 rounded-full">
+				My Orders&nbsp;&nbsp;
+				<a href={ templ.SafeURL(r.URL.Path) }>
+					<img
+						src="/static/images/refresh.png"
+						title="Refresh page"
+						width="24"
+						class="inline-block align-middle"
+					/>
+				</a>
+			</span>
+		</div>
+		<table class="w-full min-w-full divide-y divide-gray-200 border border-red-700">
+			<thead class="bg-red-100">
+				<tr>
+					<th scope="col" class="px-6 py-3 text-left text-lg font-semibold text-gray-700 uppercase tracking-wider border-b border-red-700">Order</th>
+					<th scope="col" class="px-6 py-3 text-left text-lg font-semibold text-gray-700 uppercase tracking-wider border-b border-red-700">Order Time</th>
+					<th scope="col" class="px-6 py-3 text-left text-lg font-semibold text-gray-700 uppercase tracking-wider border-b border-red-700">Status</th>
+				</tr>
+			</thead>
+			<tbody class="bg-yellow-50 divide-y divide-gray-200">
+				<!-- Loop through orders -->
+				for _, order := range orders {
+					<tr>
+						<td class="px-6 py-4 whitespace-nowrap border-b border-red-700">
+							<a href={ templ.SafeURL(fmt.Sprintf("/user/%d/orders/%s", middleware.GetUserIDFromAuthenticatedContext(r.Context()), order.OrderID)) } class="text-lg font-semibold text-red-700 hover:text-red-900">{ order.OrderID }</a>
+						</td>
+						<td class="px-6 py-4 whitespace-nowrap border-b border-red-700">{ order.Timestamp.String() }</td>
+						<td class="px-6 py-4 whitespace-nowrap border-b border-red-700">
+							<span class="inline-flex px-3 py-1 text-lg font-semibold leading-5 text-green-800 bg-green-100 rounded-full">
+								{ order.Status }
+							</span>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+}

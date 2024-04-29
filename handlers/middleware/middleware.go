@@ -71,3 +71,8 @@ func GetUserIDFromContext(ctx context.Context) (int, bool) {
 	userID, ok := ctx.Value(contextKey("userID")).(int)
 	return userID, ok
 }
+
+func GetUserIDFromAuthenticatedContext(ctx context.Context) int {
+	userID, _ := ctx.Value(contextKey("userID")).(int)
+	return userID
+}

@@ -1,7 +1,10 @@
-package templs 
+package templs
 
-import "net/http"
-import "pizza/handlers/middleware"
+import (
+	"fmt"
+	"net/http"
+	"pizza/handlers/middleware"
+)
 
 func IsAuthenticated(r *http.Request) bool {
 	return middleware.UserAuthenticatedInContext(r)
@@ -19,21 +22,12 @@ templ layout(r *http.Request, title string, contents templ.Component) {
 		</head>
 		<body>
 			@navbar(r)
-			<div class="container">
-				<div class="row">
-					<div class="col-12">
-						<div id="contents">
-							@contents
-						</div>
-					</div>
+			<div class="container mx-auto px-4 py-3">
+				<div class="mt-8">
+					@contents
 				</div>
-				<div class="mt-1">
-					<div class="col-12">
-						<p class="text-center text-secondary small">
-							Order your pizza, powered by 
-							Go
-						</p>
-					</div>
+				<div class="mt-8">
+					<p class="text-center text-gray-500 text-sm">Order your pizza, powered by Go</p>
 				</div>
 			</div>
 		</body>
@@ -47,15 +41,68 @@ templ navbar(r *http.Request) {
 				<h1 class="text-white text-2xl font-bold">Pizza Shop</h1>
 				<ul class="flex space-x-4 text-white text-lg">
 					if IsAuthenticated(r) {
-						<li><a href="/menu" class="hover:text-yellow-200">Menu</a></li>
-						<li><a href="/user/logout" class="hover:text-yellow-200">Logout</a></li>
+						<li>
+							<a href="/menu" class="hover:text-yellow-200">Menu</a>
+						</li>
+						<li>
+							<a href={ templ.SafeURL(fmt.Sprintf("/user/%d/orders", middleware.GetUserIDFromAuthenticatedContext(r.Context()))) } class="hover:text-yellow-200">Orders</a>
+						</li>
+						<li>
+							<a href="/user/logout" class="hover:text-yellow-200">Logout</a>
+						</li>
 					} else {
-						<li><a href="/menu" class="hover:text-yellow-200">Menu</a></li>
-						<li><a href="/user/login" class="hover:text-yellow-200">Login</a></li>
-						<li><a href="/user/signup" class="hover:text-yellow-200">Sign Up</a></li>
+						<li>
+							<a href="/menu" class="hover:text-yellow-200">Menu</a>
+						</li>
+						<li>
+							<a href="/user/login" class="hover:text-yellow-200">Login</a>
+						</li>
+						<li>
+							<a href="/user/signup" class="hover:text-yellow-200">Sign Up</a>
+						</li>
+					}
+					<!-- Mobile menu button -->
+					<div class="flex md:hidden">
+						<button id="mobile-menu-button" class="text-white focus:outline-none">
+							<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+							</svg>
+						</button>
+					</div>
+				</ul>
+			</div>
+			<!-- Mobile menu -->
+			<div id="mobile-menu" class="hidden md:hidden">
+				<ul class="flex flex-col space-y-2">
+					if IsAuthenticated(r) {
+						<li>
+							<a href="/menu" class="hover:text-yellow-200">Menu</a>
+						</li>
+						<li>
+							<a href={ templ.SafeURL(fmt.Sprintf("/user/%d/orders", middleware.GetUserIDFromAuthenticatedContext(r.Context()))) } class="hover:text-yellow-200">Orders</a>
+						</li>
+						<li>
+							<a href="/user/logout" class="hover:text-yellow-200">Logout</a>
+						</li>
+					} else {
+						<li>
+							<a href="/menu" class="hover:text-yellow-200">Menu</a>
+						</li>
+						<li>
+							<a href="/user/login" class="hover:text-yellow-200">Login</a>
+						</li>
+						<li>
+							<a href="/user/signup" class="hover:text-yellow-200">Sign Up</a>
+						</li>
 					}
 				</ul>
 			</div>
 		</div>
 	</nav>
+	<!-- Script to toggle mobile menu -->
+	<script>
+		document.getElementById("mobile-menu-button").addEventListener("click", function() {
+			document.getElementById("mobile-menu").classList.toggle("hidden");
+		});
+	</script>
 }

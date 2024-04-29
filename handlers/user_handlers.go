@@ -11,6 +11,7 @@ import (
 	"pizza/handlers/middleware"
 	"pizza/models"
 	"pizza/templs"
+	"strconv"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
@@ -21,6 +22,8 @@ import (
 type UserService interface {
 	InsertUser(models.UserSignupParams) error
 	Authenticate(models.UserLoginParams) (int, error)
+	GetOrders(userID int) ([]models.PizzaOrder, error)
+	GetOrderByID(userID int, orderID string) (*models.PizzaOrder, error)
 }
 
 type Publisher interface {
@@ -148,7 +151,7 @@ func (h *UserHandler) HandleGetUserSignupForm(w http.ResponseWriter, r *http.Req
 	}
 }
 
-func (h *UserHandler) HandleOrderPizza(w http.ResponseWriter, r *http.Request) {
+func (h *UserHandler) HandleCreateOrder(w http.ResponseWriter, r *http.Request) {
 
 	err := r.ParseForm()
 	if err != nil {
@@ -204,4 +207,53 @@ func (h *UserHandler) HandleOrderPizza(w http.ResponseWriter, r *http.Request) {
 	// Redirect
 	// http.Redirect(w, r, "/get_order?order_id="+orderID, http.StatusSeeOther)
 
+}
+
+func (h *UserHandler) HandleGetUserOrders(w http.ResponseWriter, r *http.Request) {
+	userIDPathValue := r.PathValue("userID")
+
+	userID, err := strconv.Atoi(userIDPathValue)
+	if err != nil {
+		h.errorHandler.HandleBadRequestFromClient(w, r, err, "bad user id")
+		return
+	}
+
+	orders, err := h.userService.GetOrders(userID)
+	if err != nil {
+		http.Error(w, "Failed to get orders", http.StatusInternalServerError)
+		return
+	}
+
+	component := templs.OrdersView(r, orders)
+	err = component.Render(context.Background(), w)
+	if err != nil {
+		h.errorHandler.HandleInternalServerError(w, r, err, "internal server error")
+		return
+	}
+}
+
+func (h *UserHandler) HandleGetUserOrder(w http.ResponseWriter, r *http.Request) {
+	userIDPathValue := r.PathValue("userID")
+
+	userID, err := strconv.Atoi(userIDPathValue)
+	if err != nil {
+		h.errorHandler.HandleBadRequestFromClient(w, r, err, "bad user id")
+		return
+	}
+
+	orderID := r.PathValue("orderID")
+	order, err := h.userService.GetOrderByID(userID, orderID)
+	if err != nil {
+		http.Error(w, "Failed to get orders", http.StatusInternalServerError)
+		return
+	}
+
+	response, err := json.Marshal(order)
+	if err != nil {
+		http.Error(w, "Failed to marshal orders", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(response)
 }

@@ -10,8 +10,11 @@ import "context"
 import "io"
 import "bytes"
 
-import "net/http"
-import "pizza/handlers/middleware"
+import (
+	"fmt"
+	"net/http"
+	"pizza/handlers/middleware"
+)
 
 func IsAuthenticated(r *http.Request) bool {
 	return middleware.UserAuthenticatedInContext(r)
@@ -37,7 +40,7 @@ func layout(r *http.Request, title string, contents templ.Component) templ.Compo
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/layout.templ`, Line: 14, Col: 30}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/layout.templ`, Line: 17, Col: 30}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -51,7 +54,7 @@ func layout(r *http.Request, title string, contents templ.Component) templ.Compo
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container\"><div class=\"row\"><div class=\"col-12\"><div id=\"contents\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto px-4 py-3\"><div class=\"mt-8\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -59,7 +62,7 @@ func layout(r *http.Request, title string, contents templ.Component) templ.Compo
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div><div class=\"mt-1\"><div class=\"col-12\"><p class=\"text-center text-secondary small\">Order your pizza, powered by  Go</p></div></div></div></body></html>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"mt-8\"><p class=\"text-center text-gray-500 text-sm\">Order your pizza, powered by Go</p></div></div></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -88,7 +91,16 @@ func navbar(r *http.Request) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if IsAuthenticated(r) {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li><a href=\"/menu\" class=\"hover:text-yellow-200\">Menu</a></li><li><a href=\"/user/logout\" class=\"hover:text-yellow-200\">Logout</a></li>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li><a href=\"/menu\" class=\"hover:text-yellow-200\">Menu</a></li><li><a href=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var4 templ.SafeURL = templ.SafeURL(fmt.Sprintf("/user/%d/orders", middleware.GetUserIDFromAuthenticatedContext(r.Context())))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var4)))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"hover:text-yellow-200\">Orders</a></li><li><a href=\"/user/logout\" class=\"hover:text-yellow-200\">Logout</a></li>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -98,7 +110,31 @@ func navbar(r *http.Request) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></div></div></nav>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!-- Mobile menu button --><div class=\"flex md:hidden\"><button id=\"mobile-menu-button\" class=\"text-white focus:outline-none\"><svg class=\"h-6 w-6\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M4 6h16M4 12h16m-7 6h7\"></path></svg></button></div></ul></div><!-- Mobile menu --><div id=\"mobile-menu\" class=\"hidden md:hidden\"><ul class=\"flex flex-col space-y-2\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if IsAuthenticated(r) {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li><a href=\"/menu\" class=\"hover:text-yellow-200\">Menu</a></li><li><a href=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var5 templ.SafeURL = templ.SafeURL(fmt.Sprintf("/user/%d/orders", middleware.GetUserIDFromAuthenticatedContext(r.Context())))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var5)))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"hover:text-yellow-200\">Orders</a></li><li><a href=\"/user/logout\" class=\"hover:text-yellow-200\">Logout</a></li>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		} else {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li><a href=\"/menu\" class=\"hover:text-yellow-200\">Menu</a></li><li><a href=\"/user/login\" class=\"hover:text-yellow-200\">Login</a></li><li><a href=\"/user/signup\" class=\"hover:text-yellow-200\">Sign Up</a></li>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></div></div></nav><!-- Script to toggle mobile menu --><script>\n\t\tdocument.getElementById(\"mobile-menu-button\").addEventListener(\"click\", function() {\n\t\t\tdocument.getElementById(\"mobile-menu\").classList.toggle(\"hidden\");\n\t\t});\n\t</script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
