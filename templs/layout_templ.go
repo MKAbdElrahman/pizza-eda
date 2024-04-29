@@ -16,11 +16,23 @@ import (
 	"pizza/handlers/middleware"
 )
 
-func IsAuthenticated(r *http.Request) bool {
-	return middleware.UserAuthenticatedInContext(r)
+type LayoutData struct {
+	URL             string
+	Flash           string
+	Title           string
+	IsAuthenticated bool
+	UserID          int
 }
 
-func layout(r *http.Request, title string, contents templ.Component) templ.Component {
+func NewLayoutData(title string, r *http.Request) LayoutData {
+	return LayoutData{
+		Title:           "Home",
+		IsAuthenticated: middleware.UserAuthenticatedInContext(r),
+		UserID:          middleware.GetUserIDFromAuthenticatedContext(r.Context()),
+	}
+}
+
+func layout(layoutData LayoutData, contents templ.Component) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -38,9 +50,9 @@ func layout(r *http.Request, title string, contents templ.Component) templ.Compo
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var2 string
-		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(title)
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(layoutData.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/layout.templ`, Line: 17, Col: 30}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/layout.templ`, Line: 29, Col: 41}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -50,7 +62,7 @@ func layout(r *http.Request, title string, contents templ.Component) templ.Compo
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = navbar(r).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = navbar(layoutData).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -73,7 +85,7 @@ func layout(r *http.Request, title string, contents templ.Component) templ.Compo
 	})
 }
 
-func navbar(r *http.Request) templ.Component {
+func navbar(layoutData LayoutData) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -90,12 +102,12 @@ func navbar(r *http.Request) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if IsAuthenticated(r) {
+		if layoutData.IsAuthenticated {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li><a href=\"/menu\" class=\"hover:text-yellow-200\">Menu</a></li><li><a href=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var4 templ.SafeURL = templ.SafeURL(fmt.Sprintf("/user/%d/orders", middleware.GetUserIDFromAuthenticatedContext(r.Context())))
+			var templ_7745c5c3_Var4 templ.SafeURL = templ.SafeURL(fmt.Sprintf("/user/%d/orders", layoutData.UserID))
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var4)))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -114,12 +126,12 @@ func navbar(r *http.Request) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		if IsAuthenticated(r) {
+		if layoutData.IsAuthenticated {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li><a href=\"/menu\" class=\"hover:text-yellow-200\">Menu</a></li><li><a href=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var5 templ.SafeURL = templ.SafeURL(fmt.Sprintf("/user/%d/orders", middleware.GetUserIDFromAuthenticatedContext(r.Context())))
+			var templ_7745c5c3_Var5 templ.SafeURL = templ.SafeURL(fmt.Sprintf("/user/%d/orders", layoutData.UserID))
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var5)))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err

@@ -14,7 +14,7 @@ func HandleHealthCheck(w http.ResponseWriter, r *http.Request) {
 
 func HandleViewHome(w http.ResponseWriter, r *http.Request) {
 
-	component := templs.HomeView(r)
+	component := templs.HomeView(templs.NewLayoutData("Home", r))
 	err := component.Render(context.Background(), w)
 
 	if err != nil {
@@ -32,7 +32,7 @@ func HandleViewMenu(w http.ResponseWriter, r *http.Request) {
 		ExtraToppings: []string{"Mushroom", "Onion", "Egg", "Ham", "Green pepper", "Fresh garlic"},
 	}
 
-	component := templs.MenuView(r, menu)
+	component := templs.MenuView(templs.NewLayoutData("Menu", r), menu)
 	err := component.Render(context.Background(), w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

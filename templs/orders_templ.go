@@ -11,11 +11,9 @@ import "io"
 import "bytes"
 
 import "pizza/models"
-import "net/http"
-import "pizza/handlers/middleware"
 import "fmt"
 
-func OrdersView(r *http.Request, m []models.PizzaOrder) templ.Component {
+func OrdersView(layoutData LayoutData, m []models.PizzaOrder) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -28,7 +26,7 @@ func OrdersView(r *http.Request, m []models.PizzaOrder) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = layout(r, "Orders", ordersView(r, m)).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layout(layoutData, ordersView(layoutData, m)).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -39,7 +37,7 @@ func OrdersView(r *http.Request, m []models.PizzaOrder) templ.Component {
 	})
 }
 
-func SingleOrdersView(r *http.Request, m models.PizzaOrder) templ.Component {
+func SingleOrdersView(layoutData LayoutData, m models.PizzaOrder) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -52,7 +50,7 @@ func SingleOrdersView(r *http.Request, m models.PizzaOrder) templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = layout(r, "Order", singleOrderView(r, m)).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layout(layoutData, singleOrderView(m)).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -63,7 +61,7 @@ func SingleOrdersView(r *http.Request, m models.PizzaOrder) templ.Component {
 	})
 }
 
-func ordersView(r *http.Request, orders []models.PizzaOrder) templ.Component {
+func ordersView(layoutData LayoutData, orders []models.PizzaOrder) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -80,7 +78,7 @@ func ordersView(r *http.Request, orders []models.PizzaOrder) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var4 templ.SafeURL = templ.SafeURL(r.URL.Path)
+		var templ_7745c5c3_Var4 templ.SafeURL = templ.SafeURL(layoutData.URL)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var4)))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -94,7 +92,7 @@ func ordersView(r *http.Request, orders []models.PizzaOrder) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var5 templ.SafeURL = templ.SafeURL(fmt.Sprintf("/user/%d/orders/%s", middleware.GetUserIDFromAuthenticatedContext(r.Context()), order.OrderID))
+			var templ_7745c5c3_Var5 templ.SafeURL = templ.SafeURL(fmt.Sprintf("/user/%d/orders/%s", layoutData.UserID, order.OrderID))
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var5)))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -106,7 +104,7 @@ func ordersView(r *http.Request, orders []models.PizzaOrder) templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(order.OrderID)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 45, Col: 219}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 43, Col: 179}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -119,7 +117,7 @@ func ordersView(r *http.Request, orders []models.PizzaOrder) templ.Component {
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(order.Timestamp.String())
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 47, Col: 96}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 45, Col: 96}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -132,7 +130,7 @@ func ordersView(r *http.Request, orders []models.PizzaOrder) templ.Component {
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(order.Status)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 50, Col: 22}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 48, Col: 22}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
@@ -154,7 +152,7 @@ func ordersView(r *http.Request, orders []models.PizzaOrder) templ.Component {
 	})
 }
 
-func singleOrderView(r *http.Request, order models.PizzaOrder) templ.Component {
+func singleOrderView(order models.PizzaOrder) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -174,7 +172,7 @@ func singleOrderView(r *http.Request, order models.PizzaOrder) templ.Component {
 		var templ_7745c5c3_Var10 string
 		templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(order.OrderID)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 67, Col: 39}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 65, Col: 39}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 		if templ_7745c5c3_Err != nil {
@@ -187,7 +185,7 @@ func singleOrderView(r *http.Request, order models.PizzaOrder) templ.Component {
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(order.Timestamp.String())
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 71, Col: 50}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 69, Col: 50}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {
@@ -200,7 +198,7 @@ func singleOrderView(r *http.Request, order models.PizzaOrder) templ.Component {
 		var templ_7745c5c3_Var12 string
 		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(order.Status)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 75, Col: 38}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 73, Col: 38}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 		if templ_7745c5c3_Err != nil {
@@ -213,7 +211,7 @@ func singleOrderView(r *http.Request, order models.PizzaOrder) templ.Component {
 		var templ_7745c5c3_Var13 string
 		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(order.Pizza.Sauce)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 81, Col: 44}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 79, Col: 44}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 		if templ_7745c5c3_Err != nil {
@@ -226,7 +224,7 @@ func singleOrderView(r *http.Request, order models.PizzaOrder) templ.Component {
 		var templ_7745c5c3_Var14 string
 		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(order.Pizza.Cheese)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 85, Col: 45}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 83, Col: 45}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 		if templ_7745c5c3_Err != nil {
@@ -239,7 +237,7 @@ func singleOrderView(r *http.Request, order models.PizzaOrder) templ.Component {
 		var templ_7745c5c3_Var15 string
 		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(order.Pizza.MainTopping)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 89, Col: 50}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 87, Col: 50}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var15))
 		if templ_7745c5c3_Err != nil {
@@ -252,7 +250,7 @@ func singleOrderView(r *http.Request, order models.PizzaOrder) templ.Component {
 		var templ_7745c5c3_Var16 string
 		templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(order.Pizza.ExtraTopping)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 93, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/orders.templ`, Line: 91, Col: 51}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 		if templ_7745c5c3_Err != nil {

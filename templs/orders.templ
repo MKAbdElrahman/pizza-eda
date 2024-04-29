@@ -1,25 +1,23 @@
 package templs 
 
 import "pizza/models"
-import "net/http"
-import "pizza/handlers/middleware"
 import "fmt"
 
-templ OrdersView(r *http.Request, m []models.PizzaOrder) {
-	@layout(r, "Orders", ordersView(r, m))
+templ OrdersView(layoutData LayoutData, m []models.PizzaOrder) {
+	@layout(layoutData, ordersView(layoutData, m))
 }
 
-templ SingleOrdersView(r *http.Request, m models.PizzaOrder) {
-	@layout(r, "Order", singleOrderView(r, m))
+templ SingleOrdersView(layoutData LayoutData, m models.PizzaOrder) {
+	@layout(layoutData, singleOrderView(m))
 }
 
-templ ordersView(r *http.Request, orders []models.PizzaOrder) {
+templ ordersView(layoutData LayoutData, orders []models.PizzaOrder) {
 	<div class="w-full max-w-screen-lg mx-auto">
 		<!-- Centering the table -->
 		<div class="flex justify-between items-center mb-4">
 			<span class="inline-block bg-green-500 text-white px-4 py-2 rounded-full">
 				My Orders&nbsp;&nbsp;
-				<a href={ templ.SafeURL(r.URL.Path) }>
+				<a href={ templ.SafeURL(layoutData.URL) }>
 					<img
 						src="/static/images/refresh.png"
 						title="Refresh page"
@@ -42,7 +40,7 @@ templ ordersView(r *http.Request, orders []models.PizzaOrder) {
 				for _, order := range orders {
 					<tr>
 						<td class="px-6 py-4 whitespace-nowrap border-b border-red-700">
-							<a href={ templ.SafeURL(fmt.Sprintf("/user/%d/orders/%s", middleware.GetUserIDFromAuthenticatedContext(r.Context()), order.OrderID)) } class="text-lg font-semibold text-red-700 hover:text-red-900">{ order.OrderID }</a>
+							<a href={ templ.SafeURL(fmt.Sprintf("/user/%d/orders/%s", layoutData.UserID, order.OrderID)) } class="text-lg font-semibold text-red-700 hover:text-red-900">{ order.OrderID }</a>
 						</td>
 						<td class="px-6 py-4 whitespace-nowrap border-b border-red-700">{ order.Timestamp.String() }</td>
 						<td class="px-6 py-4 whitespace-nowrap border-b border-red-700">
@@ -57,7 +55,7 @@ templ ordersView(r *http.Request, orders []models.PizzaOrder) {
 	</div>
 }
 
-templ singleOrderView(r *http.Request, order models.PizzaOrder) {
+templ singleOrderView(order models.PizzaOrder) {
 	<div class="container mx-auto px-4 py-8">
 		<div class="max-w-lg mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
 			<div class="bg-yellow-50 p-6">

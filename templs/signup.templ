@@ -1,9 +1,7 @@
 package templs
 
-import "net/http"
-
-templ SignupView(r *http.Request) {
-	@layout(r, "Login", signupView())
+templ SignupView(layoutData LayoutData) {
+	@layout(layoutData, signupView())
 }
 
 templ signupView() {

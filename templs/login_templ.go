@@ -10,9 +10,7 @@ import "context"
 import "io"
 import "bytes"
 
-import "net/http"
-
-func LoginView(r *http.Request) templ.Component {
+func LoginView(layoutData LayoutData) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -25,7 +23,7 @@ func LoginView(r *http.Request) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = layout(r, "Login", loginView()).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = layout(layoutData, loginView()).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

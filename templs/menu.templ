@@ -1,12 +1,11 @@
 package templs
 
 import (
-	"net/http"
 	"pizza/models"
 )
 
-templ MenuView(r *http.Request, m models.PizzaMenu) {
-	@layout(r, "Menu", menuView(m))
+templ MenuView(layoutData LayoutData, m models.PizzaMenu) {
+	@layout(layoutData, menuView(m))
 }
 
 templ menuView(menu models.PizzaMenu) {

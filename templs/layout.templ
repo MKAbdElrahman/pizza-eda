@@ -6,22 +6,34 @@ import (
 	"pizza/handlers/middleware"
 )
 
-func IsAuthenticated(r *http.Request) bool {
-	return middleware.UserAuthenticatedInContext(r)
+type LayoutData struct {
+	URL             string
+	Flash           string
+	Title           string
+	IsAuthenticated bool
+	UserID          int
 }
 
-templ layout(r *http.Request, title string, contents templ.Component) {
+func NewLayoutData(title string, r *http.Request) LayoutData {
+	return LayoutData{
+		Title:           "Home",
+		IsAuthenticated: middleware.UserAuthenticatedInContext(r),
+		UserID:          middleware.GetUserIDFromAuthenticatedContext(r.Context()),
+	}
+}
+
+templ layout(layoutData LayoutData, contents templ.Component) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
-			<title>Pizza Demo | { title }</title>
+			<title>Pizza Demo | { layoutData.Title }</title>
 			<link rel="icon" type="image/png" href="/static/images/favicon.ico"/>
 			<meta charset="utf-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
 			<script src="https://cdn.tailwindcss.com"></script>
 		</head>
 		<body>
-			@navbar(r)
+			@navbar(layoutData)
 			<div class="container mx-auto px-4 py-3">
 				<div class="mt-8">
 					@contents
@@ -34,18 +46,18 @@ templ layout(r *http.Request, title string, contents templ.Component) {
 	</html>
 }
 
-templ navbar(r *http.Request) {
+templ navbar(layoutData LayoutData) {
 	<nav class="bg-red-700 shadow-md">
 		<div class="container mx-auto px-4 py-3">
 			<div class="flex items-center justify-between">
 				<h1 class="text-white text-2xl font-bold">Pizza Shop</h1>
 				<ul class="flex space-x-4 text-white text-lg">
-					if IsAuthenticated(r) {
+					if layoutData.IsAuthenticated {
 						<li>
 							<a href="/menu" class="hover:text-yellow-200">Menu</a>
 						</li>
 						<li>
-							<a href={ templ.SafeURL(fmt.Sprintf("/user/%d/orders", middleware.GetUserIDFromAuthenticatedContext(r.Context()))) } class="hover:text-yellow-200">Orders</a>
+							<a href={ templ.SafeURL(fmt.Sprintf("/user/%d/orders", layoutData.UserID)) } class="hover:text-yellow-200">Orders</a>
 						</li>
 						<li>
 							<a href="/user/logout" class="hover:text-yellow-200">Logout</a>
@@ -74,12 +86,12 @@ templ navbar(r *http.Request) {
 			<!-- Mobile menu -->
 			<div id="mobile-menu" class="hidden md:hidden">
 				<ul class="flex flex-col space-y-2">
-					if IsAuthenticated(r) {
+					if layoutData.IsAuthenticated {
 						<li>
 							<a href="/menu" class="hover:text-yellow-200">Menu</a>
 						</li>
 						<li>
-							<a href={ templ.SafeURL(fmt.Sprintf("/user/%d/orders", middleware.GetUserIDFromAuthenticatedContext(r.Context()))) } class="hover:text-yellow-200">Orders</a>
+							<a href={ templ.SafeURL(fmt.Sprintf("/user/%d/orders", layoutData.UserID)) } class="hover:text-yellow-200">Orders</a>
 						</li>
 						<li>
 							<a href="/user/logout" class="hover:text-yellow-200">Logout</a>
