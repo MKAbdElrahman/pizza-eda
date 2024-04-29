@@ -31,7 +31,7 @@ func (os *orderStore) InsertOrder(o models.PizzaOrder) error {
 }
 
 func (os *orderStore) GetOrders(userID int) ([]models.PizzaOrder, error) {
-	rows, err := os.db.Query("SELECT order_id, user_id, sauce, cheese, main_topping, extra_topping, status, timestamp FROM orders WHERE user_id = ?", userID)
+	rows, err := os.db.Query("SELECT order_id, user_id, sauce, cheese, main_topping, extra_topping, status, timestamp FROM orders WHERE user_id = ? ORDER BY timestamp DESC", userID)
 	if err != nil {
 		return nil, err
 	}
