@@ -58,6 +58,8 @@ func (h *UserHandler) HandleGetUserOrder(w http.ResponseWriter, r *http.Request)
 
 	layoutData := templs.NewLayoutData("Order", r)
 	layoutData.Flash = flash
+
+	
 	component := templs.SingleOrdersView(layoutData, *order)
 	err = component.Render(context.Background(), w)
 	if err != nil {

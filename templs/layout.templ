@@ -35,9 +35,19 @@ templ layout(layoutData LayoutData, contents templ.Component) {
 		<body>
 			@navbar(layoutData)
 			<div class="container mx-auto px-4 py-3">
+				<!-- Flash messages -->
+				<div class="mt-8">
+					if layoutData.Flash != "" {
+						<div class="bg-red-100 border-l-4 border-red-400 text-red-700 p-4 mb-4 rounded-md" role="alert">
+							<p class="font-bold text-lg">{ layoutData.Flash }</p>
+						</div>
+					}
+				</div>
+				<!-- Main content -->
 				<div class="mt-8">
 					@contents
 				</div>
+				<!-- Footer -->
 				<div class="mt-8">
 					<p class="text-center text-gray-500 text-sm">Order your pizza, powered by Go</p>
 				</div>
