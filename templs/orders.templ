@@ -9,6 +9,10 @@ templ OrdersView(r *http.Request, m []models.PizzaOrder) {
 	@layout(r, "Orders", ordersView(r, m))
 }
 
+templ SingleOrdersView(r *http.Request, m models.PizzaOrder) {
+	@layout(r, "Order", singleOrderView(r, m))
+}
+
 templ ordersView(r *http.Request, orders []models.PizzaOrder) {
 	<div class="w-full max-w-screen-lg mx-auto">
 		<!-- Centering the table -->
@@ -50,5 +54,46 @@ templ ordersView(r *http.Request, orders []models.PizzaOrder) {
 				}
 			</tbody>
 		</table>
+	</div>
+}
+
+templ singleOrderView(r *http.Request, order models.PizzaOrder) {
+	<div class="container mx-auto px-4 py-8">
+		<div class="max-w-lg mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+			<div class="bg-yellow-50 p-6">
+				<h2 class="text-3xl font-bold mb-6 text-red-700">Order Details</h2>
+				<div class="mb-6">
+					<p class="text-lg font-semibold text-red-700">Order ID:</p>
+					<p class="text-lg">{ order.OrderID }</p>
+				</div>
+				<div class="mb-6">
+					<p class="text-lg font-semibold text-red-700">Order Time:</p>
+					<p class="text-lg">{ order.Timestamp.String() }</p>
+				</div>
+				<div class="mb-6">
+					<p class="text-lg font-semibold text-red-700">Status:</p>
+					<p class="text-lg">{ order.Status }</p>
+				</div>
+				<div class="mb-6">
+					<h3 class="text-2xl font-bold mb-4 text-red-700">Pizza Details</h3>
+					<div class="mb-3">
+						<p class="text-lg font-semibold text-red-700">Sauce:</p>
+						<p class="text-lg">{ order.Pizza.Sauce }</p>
+					</div>
+					<div class="mb-3">
+						<p class="text-lg font-semibold text-red-700">Cheese:</p>
+						<p class="text-lg">{ order.Pizza.Cheese }</p>
+					</div>
+					<div class="mb-3">
+						<p class="text-lg font-semibold text-red-700">Main Topping:</p>
+						<p class="text-lg">{ order.Pizza.MainTopping }</p>
+					</div>
+					<div class="mb-3">
+						<p class="text-lg font-semibold text-red-700">Extra Topping:</p>
+						<p class="text-lg">{ order.Pizza.ExtraTopping }</p>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 }

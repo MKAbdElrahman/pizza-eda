@@ -248,12 +248,11 @@ func (h *UserHandler) HandleGetUserOrder(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	response, err := json.Marshal(order)
+	component := templs.SingleOrdersView(r, *order)
+	err = component.Render(context.Background(), w)
 	if err != nil {
-		http.Error(w, "Failed to marshal orders", http.StatusInternalServerError)
+		h.errorHandler.HandleInternalServerError(w, r, err, "internal server error")
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(response)
 }
