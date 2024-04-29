@@ -52,19 +52,19 @@ func menuView(menu models.PizzaMenu) templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"max-w-lg mx-auto p-6 bg-yellow-50 rounded-lg shadow-lg\"><h2 class=\"text-3xl font-bold mb-6 text-red-700\">🍕 Customize Your Pizza 🍕</h2><form action=\"/order\" class=\"grid grid-cols-2 gap-4\" method=\"POST\"><div><label for=\"sauce\" class=\"block text-lg font-semibold text-red-700\">Sauce:</label><div class=\"mt-1 flex flex-wrap gap-4\"><!-- Added flex and flex-wrap for alignment and wrapping --><!-- Loop through sauce options -->")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"container mx-auto px-4 py-8\"><div class=\"max-w-lg mx-auto bg-white rounded-lg shadow-lg overflow-hidden\"><div class=\"bg-yellow-50 p-6\"><h2 class=\"text-3xl font-bold mb-6 text-red-700\">🍕 Customize Your Pizza 🍕</h2><form action=\"/order\" method=\"POST\"><!-- Sauce options --><div class=\"mb-6\"><label for=\"sauce\" class=\"block text-lg font-semibold text-red-700\">Sauce:</label><div class=\"flex flex-wrap gap-4\"><!-- Loop through sauce options -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for _, sauce := range menu.Sauces {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label class=\"inline-flex items-center\"><!-- Used inline-flex to align items horizontally --><input type=\"radio\" name=\"sauce\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label class=\"inline-flex items-center\"><input type=\"radio\" name=\"sauce\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(sauce)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 24, Col: 53}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 25, Col: 55}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -77,7 +77,7 @@ func menuView(menu models.PizzaMenu) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(sauce)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 25, Col: 54}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 26, Col: 56}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -88,19 +88,19 @@ func menuView(menu models.PizzaMenu) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><!-- Repeat the same pattern for other options --><div><label for=\"cheese\" class=\"block text-lg font-semibold text-red-700\">Cheese:</label><div class=\"mt-1 flex flex-wrap gap-4\"><!-- Added flex and flex-wrap for alignment and wrapping --><!-- Loop through cheese options -->")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><!-- Cheese options --><div class=\"mb-6\"><label for=\"cheese\" class=\"block text-lg font-semibold text-red-700\">Cheese:</label><div class=\"flex flex-wrap gap-4\"><!-- Loop through cheese options -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for _, cheese := range menu.Cheeses {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label class=\"inline-flex items-center\"><!-- Used inline-flex to align items horizontally --><input type=\"radio\" name=\"cheese\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label class=\"inline-flex items-center\"><input type=\"radio\" name=\"cheese\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(cheese)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 39, Col: 55}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 38, Col: 57}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -113,7 +113,7 @@ func menuView(menu models.PizzaMenu) templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(cheese)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 40, Col: 55}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 39, Col: 57}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -124,19 +124,19 @@ func menuView(menu models.PizzaMenu) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div><label for=\"main_topping\" class=\"block text-lg font-semibold text-red-700\">Main Topping:</label><div class=\"mt-1 flex flex-wrap gap-4\"><!-- Added flex and flex-wrap for alignment and wrapping --><!-- Loop through main topping options -->")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><!-- Main Topping options --><div class=\"mb-6\"><label for=\"main_topping\" class=\"block text-lg font-semibold text-red-700\">Main Topping:</label><div class=\"flex flex-wrap gap-4\"><!-- Loop through main topping options -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for _, main_topping := range menu.MainToppings {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label class=\"inline-flex items-center\"><!-- Used inline-flex to align items horizontally --><input type=\"radio\" name=\"main_topping\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label class=\"inline-flex items-center\"><input type=\"radio\" name=\"main_topping\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var7 string
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(main_topping)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 53, Col: 67}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 51, Col: 69}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -149,7 +149,7 @@ func menuView(menu models.PizzaMenu) templ.Component {
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(main_topping)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 54, Col: 61}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 52, Col: 63}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
@@ -160,19 +160,19 @@ func menuView(menu models.PizzaMenu) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div><label for=\"extra_topping\" class=\"block text-lg font-semibold text-red-700\">Extra Topping:</label><div class=\"mt-1 flex flex-wrap gap-4\"><!-- Added flex and flex-wrap for alignment and wrapping --><!-- Loop through extra topping options -->")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><!-- Extra Topping options --><div class=\"mb-6\"><label for=\"extra_topping\" class=\"block text-lg font-semibold text-red-700\">Extra Topping:</label><div class=\"flex flex-wrap gap-4\"><!-- Loop through extra topping options -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for _, extra_topping := range menu.ExtraToppings {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label class=\"inline-flex items-center\"><!-- Used inline-flex to align items horizontally --><input type=\"radio\" name=\"extra_topping\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<label class=\"inline-flex items-center\"><input type=\"radio\" name=\"extra_topping\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var9 string
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(extra_topping)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 67, Col: 69}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 64, Col: 71}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
@@ -185,7 +185,7 @@ func menuView(menu models.PizzaMenu) templ.Component {
 			var templ_7745c5c3_Var10 string
 			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(extra_topping)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 68, Col: 62}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `templs/menu.templ`, Line: 65, Col: 64}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 			if templ_7745c5c3_Err != nil {
@@ -196,7 +196,7 @@ func menuView(menu models.PizzaMenu) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><div class=\"col-span-2\"><div class=\"flex justify-end mt-6\"><button type=\"submit\" class=\"bg-red-700 text-white py-3 px-6 rounded-lg font-semibold hover:bg-red-800 transition duration-300 ease-in-out\">Submit Order</button> <button type=\"reset\" class=\"bg-red-500 text-white py-3 px-6 ml-4 rounded-lg font-semibold hover:bg-red-600 transition duration-300 ease-in-out\">Clear Form</button></div></div></form></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div><!-- Submit and Clear buttons --><div class=\"flex justify-end\"><button type=\"submit\" class=\"bg-red-700 text-white py-3 px-6 rounded-lg font-semibold hover:bg-red-800 transition duration-300 ease-in-out mr-4\">Submit Order</button> <button type=\"reset\" class=\"bg-red-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-red-600 transition duration-300 ease-in-out\">Clear Form</button></div></form></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
