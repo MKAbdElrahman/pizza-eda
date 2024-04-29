@@ -204,8 +204,8 @@ func (h *UserHandler) HandleCreateOrder(w http.ResponseWriter, r *http.Request) 
 		h.errorHandler.HandleInternalServerError(w, r, err, "internal server error")
 		return
 	}
-	// Redirect
-	// http.Redirect(w, r, "/get_order?order_id="+orderID, http.StatusSeeOther)
+
+	http.Redirect(w, r, fmt.Sprintf("/user/%d/orders/%s", o.UserID, o.OrderID), http.StatusSeeOther)
 
 }
 
