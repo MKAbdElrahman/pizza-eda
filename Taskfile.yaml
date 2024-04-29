@@ -1,0 +1,39 @@
+version: 3
+env:
+  MIGRATIONS_DIR: data/migrations
+dotenv: [".env"]
+tasks:
+  migrate-install: go install -tags "postgres,mysql,sqlite" github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+ 
+  up: docker compose  up -d
+  down: docker compose down
+
+  run: "wgo -file=.go -file=.yaml -file=.templ -xfile=_templ.go templ generate :: go run ./cmd/web"
+ 
+  kafdrop: google-chrome  http://localhost:9000
+
+  migrate-new:
+    desc: task migrate -- [migration_pair_name]
+    cmds:
+      - migrate create -seq -ext=.sql -dir=$MIGRATIONS_DIR {{.CLI_ARGS}}
+  migrate-up:
+    desc: execute migrations
+    cmds:
+      - migrate -path=$MIGRATIONS_DIR -database=$ROOT_DB_DSN_FOR_MIGRATE up
+  migrate-down:
+    desc: down all migrations
+    cmds:
+      - migrate -path=$MIGRATIONS_DIR -database=$ROOT_DB_DSN_FOR_MIGRATE down
+  migrate-goto:
+    desc: migrate to a specific version
+    cmds:
+      - migrate -path=$MIGRATIONS_DIR -database=$ROOT_DB_DSN_FOR_MIGRATE  goto {{.CLI_ARGS}}
+  migrate-force:
+    desc: used for fixing errors in SQL migrations
+    cmds:
+      - migrate -path=$MIGRATIONS_DIR -database=$ROOT_DB_DSN_FOR_MIGRATE force {{.CLI_ARGS}}
+
+  migrate-version:
+    desc: show current version
+    cmds:
+      - migrate -path=$MIGRATIONS_DIR -database=$ROOT_DB_DSN_FOR_MIGRATE version

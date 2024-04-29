@@ -1,0 +1,70 @@
+package templs
+
+import "net/http"
+
+templ SignupView(r *http.Request) {
+	@layout(r, "Login", signupView())
+}
+
+templ signupView() {
+	<form action="/user/signup" class="space-y-4 needs-validation" method="POST">
+		<div class="flex justify-center mt-8">
+			<div class="w-full max-w-md px-4 py-8 bg-yellow-50 rounded-lg shadow-lg">
+				<div class="mb-6">
+					<label for="username" class="block text-lg font-semibold text-red-700">Username:</label>
+					<input
+						type="text"
+						class="w-full px-3 py-2 rounded-md border border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500"
+						id="username"
+						name="username"
+						maxlength="16"
+						required
+						autocomplete="off"
+					/>
+				</div>
+				<div class="mb-6">
+					<label for="password" class="block text-lg font-semibold text-red-700">Password:</label>
+					<input
+						type="password"
+						class="w-full px-3 py-2 rounded-md border border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500"
+						id="password"
+						name="password"
+						minlength="8"
+						required
+						autocomplete="new-password"
+					/>
+				</div>
+				<div class="mb-6">
+					<label for="email" class="block text-lg font-semibold text-red-700">Email:</label>
+					<input
+						type="email"
+						class="w-full px-3 py-2 rounded-md border border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500"
+						id="email"
+						name="email"
+						required
+					/>
+				</div>
+				<div class="mb-6">
+					<label for="phone" class="block text-lg font-semibold text-red-700">Phone Number:</label>
+					<input
+						type="tel"
+						class="w-full px-3 py-2 rounded-md border border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500"
+						id="phone"
+						name="phone"
+					/>
+				</div>
+				<div class="mb-6">
+					<label for="address" class="block text-lg font-semibold text-red-700">Address:</label>
+					<textarea
+						class="w-full px-3 py-2 rounded-md border border-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500"
+						id="address"
+						name="address"
+						rows="3"
+						required
+					></textarea>
+				</div>
+				<button type="submit" class="w-full py-2 text-center bg-red-700 text-white rounded-lg font-semibold hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Signup</button>
+			</div>
+		</div>
+	</form>
+}

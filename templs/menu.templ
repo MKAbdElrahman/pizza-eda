@@ -1,0 +1,81 @@
+package templs 
+
+import (
+	"pizza/models"
+	"net/http"
+)
+
+templ MenuView(r *http.Request, m models.PizzaMenu) {
+	@layout(r, "Menu", menuView(m))
+}
+
+templ menuView(menu models.PizzaMenu) {
+	<div class="max-w-lg mx-auto p-6 bg-yellow-50 rounded-lg shadow-lg">
+		<h2 class="text-3xl font-bold mb-6 text-red-700">🍕 Customize Your Pizza 🍕</h2>
+		<form action="/pizza/order" class="grid grid-cols-2 gap-4" method="POST">
+			<div>
+				<label for="sauce" class="block text-lg font-semibold text-red-700">Sauce:</label>
+				<div class="mt-1 flex flex-wrap gap-4">
+					<!-- Added flex and flex-wrap for alignment and wrapping -->
+					<!-- Loop through sauce options -->
+					for _, sauce := range menu.Sauces {
+						<label class="inline-flex items-center">
+							<!-- Used inline-flex to align items horizontally -->
+							<input type="radio" name="sauce" value={ sauce } class="form-radio h-5 w-5 text-red-700"/>
+							<span class="ml-2 text-lg text-red-700">{ sauce }</span>
+						</label>
+					}
+				</div>
+			</div>
+			<!-- Repeat the same pattern for other options -->
+			<div>
+				<label for="cheese" class="block text-lg font-semibold text-red-700">Cheese:</label>
+				<div class="mt-1 flex flex-wrap gap-4">
+					<!-- Added flex and flex-wrap for alignment and wrapping -->
+					<!-- Loop through cheese options -->
+					for _, cheese := range menu.Cheeses {
+						<label class="inline-flex items-center">
+							<!-- Used inline-flex to align items horizontally -->
+							<input type="radio" name="cheese" value={ cheese } class="form-radio h-5 w-5 text-red-700"/>
+							<span class="ml-2 text-lg text-red-700">{ cheese }</span>
+						</label>
+					}
+				</div>
+			</div>
+			<div>
+				<label for="main_topping" class="block text-lg font-semibold text-red-700">Main Topping:</label>
+				<div class="mt-1 flex flex-wrap gap-4">
+					<!-- Added flex and flex-wrap for alignment and wrapping -->
+					<!-- Loop through main topping options -->
+					for _, main_topping := range menu.MainToppings {
+						<label class="inline-flex items-center">
+							<!-- Used inline-flex to align items horizontally -->
+							<input type="radio" name="main_topping" value={ main_topping } class="form-radio h-5 w-5 text-red-700"/>
+							<span class="ml-2 text-lg text-red-700">{ main_topping }</span>
+						</label>
+					}
+				</div>
+			</div>
+			<div>
+				<label for="extra_topping" class="block text-lg font-semibold text-red-700">Extra Topping:</label>
+				<div class="mt-1 flex flex-wrap gap-4">
+					<!-- Added flex and flex-wrap for alignment and wrapping -->
+					<!-- Loop through extra topping options -->
+					for _, extra_topping := range menu.ExtraToppings {
+						<label class="inline-flex items-center">
+							<!-- Used inline-flex to align items horizontally -->
+							<input type="radio" name="extra_topping" value={ extra_topping } class="form-radio h-5 w-5 text-red-700"/>
+							<span class="ml-2 text-lg text-red-700">{ extra_topping }</span>
+						</label>
+					}
+				</div>
+			</div>
+			<div class="col-span-2">
+				<div class="flex justify-end mt-6">
+					<button type="submit" class="bg-red-700 text-white py-3 px-6 rounded-lg font-semibold hover:bg-red-800 transition duration-300 ease-in-out">Submit Order</button>
+					<button type="reset" class="bg-red-500 text-white py-3 px-6 ml-4 rounded-lg font-semibold hover:bg-red-600 transition duration-300 ease-in-out">Clear Form</button>
+				</div>
+			</div>
+		</form>
+	</div>
+}

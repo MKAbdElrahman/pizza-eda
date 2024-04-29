@@ -1,0 +1,11 @@
+package templs
+
+import "net/http"
+
+templ HomeView(r *http.Request) {
+	@layout(r, "Home", homeView())
+}
+
+templ homeView() {
+	
+}

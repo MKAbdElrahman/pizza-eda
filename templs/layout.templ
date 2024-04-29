@@ -1,0 +1,61 @@
+package templs 
+
+import "net/http"
+import "pizza/handlers/middleware"
+
+func IsAuthenticated(r *http.Request) bool {
+	return middleware.UserAuthenticatedInContext(r)
+}
+
+templ layout(r *http.Request, title string, contents templ.Component) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<title>Pizza Demo | { title }</title>
+			<link rel="icon" type="image/png" href="/static/images/favicon.ico"/>
+			<meta charset="utf-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<script src="https://cdn.tailwindcss.com"></script>
+		</head>
+		<body>
+			@navbar(r)
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div id="contents">
+							@contents
+						</div>
+					</div>
+				</div>
+				<div class="mt-1">
+					<div class="col-12">
+						<p class="text-center text-secondary small">
+							Order your pizza, powered by 
+							Go
+						</p>
+					</div>
+				</div>
+			</div>
+		</body>
+	</html>
+}
+
+templ navbar(r *http.Request) {
+	<nav class="bg-red-700 shadow-md">
+		<div class="container mx-auto px-4 py-3">
+			<div class="flex items-center justify-between">
+				<h1 class="text-white text-2xl font-bold">Pizza Shop</h1>
+				<ul class="flex space-x-4 text-white text-lg">
+					if IsAuthenticated(r) {
+						<li><a href="/menu" class="hover:text-yellow-200">Menu</a></li>
+						<li><a href="/user/logout" class="hover:text-yellow-200">Logout</a></li>
+					} else {
+						<li><a href="/menu" class="hover:text-yellow-200">Menu</a></li>
+						<li><a href="/user/login" class="hover:text-yellow-200">Login</a></li>
+						<li><a href="/user/signup" class="hover:text-yellow-200">Sign Up</a></li>
+					}
+				</ul>
+			</div>
+		</div>
+	</nav>
+}
