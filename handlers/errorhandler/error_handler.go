@@ -28,3 +28,7 @@ func (h *CentralErrorHandler) HandleBadRequestFromClient(w http.ResponseWriter, 
 func (h *CentralErrorHandler) HandleResourceNotFound(w http.ResponseWriter, r *http.Request, err error, msg string) {
 	http.Error(w, msg, http.StatusNotFound)
 }
+
+func (h *CentralErrorHandler) HandleNotAuthorized(w http.ResponseWriter, r *http.Request, err error, msg string) {
+	http.Error(w, msg, http.StatusUnauthorized)
+}
