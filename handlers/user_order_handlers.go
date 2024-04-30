@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"pizza/handlers/middleware"
 	"pizza/models"
+	"pizza/pubsub"
 	"pizza/templs"
 	"strconv"
 	"time"
@@ -113,18 +114,22 @@ func (h *UserHandler) HandleCreateOrder(w http.ResponseWriter, r *http.Request) 
 		h.errorHandler.HandleInternalServerError(w, r, err, "internal server error")
 		return
 	}
-	// Produce to Kafka topic
-
 	orderAsBytes, err := json.Marshal(o)
 	if err != nil {
 		h.errorHandler.HandleInternalServerError(w, r, err, "internal server error")
 		return
 	}
-	err = h.publisher.Publish("pizza-ordered", []byte(o.OrderID), orderAsBytes)
+	rep, err := h.publisher.Produce(context.Background(), pubsub.ProducerMessage{
+		Key:   []byte(orderID),
+		Topic: "orders",
+		Value: orderAsBytes,
+	})
 	if err != nil {
 		h.errorHandler.HandleInternalServerError(w, r, err, "internal server error")
 		return
 	}
+
+	h.logger.Info("order_request_emitted", "order", o, "topic", rep.Topic, "Partition", rep.Partition, "offset", rep.Offset)
 
 	h.sessionManager.Put(r.Context(), "flash", "Order created!")
 

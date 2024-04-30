@@ -52,10 +52,12 @@ func main() {
 	userStore := stores.NewUserStore(dbConn)
 	orderStore := stores.NewOrderStore(dbConn)
 
-	publisher, err := pubsub.NewKafkaProducer("localhost:9092")
-	if err != nil {
+	producer, err := pubsub.NewConfluentProducer("localhost:9092")
 
+	if err != nil {
+		panic(err)
 	}
+
 	dynamic := alice.New(sessionManager.LoadAndSave, middleware.SetAuthenticatedUserInContext(sessionManager, userStore, errorHandler))
 
 	protected := dynamic.Append(middleware.RequireLoggingInFirst(sessionManager))
@@ -66,7 +68,7 @@ func main() {
 	fileServer := http.FileServer(http.Dir("./static_assets/"))
 	mux.Handle("GET /static/", http.StripPrefix("/static", fileServer))
 	userService := services.NewUserService(userStore, orderStore)
-	userHandler := handlers.NewUserHandler(userService, orderStore, publisher, sessionManager, logger, errorHandler)
+	userHandler := handlers.NewUserHandler(logger, userService, orderStore, producer, sessionManager, logger, errorHandler)
 
 	mux.Handle("GET /{$}", dynamic.ThenFunc(handlers.HandleViewHome))
 	mux.Handle("GET /menu", dynamic.ThenFunc(handlers.HandleViewMenu))

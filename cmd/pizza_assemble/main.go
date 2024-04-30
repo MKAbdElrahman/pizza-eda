@@ -1,14 +1,50 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"pizza/models"
 	"pizza/pubsub"
+	"time"
 )
 
 func main() {
+
+	producerErrCh := make(chan error)
+	deiveryCh := make(chan pubsub.DeliveryReport)
+
+	producer, err := pubsub.NewConfluentProducer("localhost:9092")
+
+	if err != nil {
+		panic(err)
+	}
+
+	go func() {
+		for e := range producerErrCh {
+			fmt.Println(e)
+		}
+	}()
+
+	go func() {
+		for d := range deiveryCh {
+			fmt.Println(d)
+		}
+	}()
+
+	for {
+
+		time.Sleep(time.Second)
+
+		producer.Produce(context.Background(), pubsub.ProducerMessage{
+			Topic: "test-topic",
+			Key:   []byte("test-key-2"),
+			Value: []byte("test-value-2"),
+		})
+
+	}
+
 	log.Println("Starting pizza assembler microservice...")
 
 	groupID := "pizza-assemblers-group-1"

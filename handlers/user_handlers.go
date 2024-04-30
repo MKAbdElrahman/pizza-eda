@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"pizza/handlers/errorhandler"
 	"pizza/models"
+	"pizza/pubsub"
 	"pizza/templs"
 
 	"github.com/alexedwards/scs/v2"
@@ -33,16 +34,18 @@ type UserHandler struct {
 	errorHandler   *errorhandler.CentralErrorHandler
 	sessionManager *scs.SessionManager
 	ordersStore    OrderStore
-	publisher      Publisher
+	publisher      pubsub.Producer
+	logger         *slog.Logger
 }
 
-func NewUserHandler(userService UserService, orderStore OrderStore, publisher Publisher, sessionManager *scs.SessionManager, logger *slog.Logger, errorHandler *errorhandler.CentralErrorHandler) *UserHandler {
+func NewUserHandler(log *slog.Logger, userService UserService, orderStore OrderStore, publisher pubsub.Producer, sessionManager *scs.SessionManager, logger *slog.Logger, errorHandler *errorhandler.CentralErrorHandler) *UserHandler {
 	return &UserHandler{
 		userService:    userService,
 		errorHandler:   errorHandler,
 		sessionManager: sessionManager,
 		ordersStore:    orderStore,
 		publisher:      publisher,
+		logger:         log,
 	}
 }
 
